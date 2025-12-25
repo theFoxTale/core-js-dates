@@ -1,18 +1,19 @@
-function getWeekNumberByDate(date) {
-  const thursdayIndex = 4;
-  const firstJanuaryDay = new Date(date.getFullYear(), 0, 1);
-  const januaryDayIndex = firstJanuaryDay.getDay();
+function getNextFridayThe13th(date) {
+  const currentDay = new Date(date);
+  currentDay.setDate(13);
 
-  const firstThursdayShift =
-    januaryDayIndex <= thursdayIndex
-      ? thursdayIndex - januaryDayIndex
-      : thursdayIndex - januaryDayIndex + 7;
-  const firstThursday = new Date(date.getFullYear(), 0, 1 + firstThursdayShift);
+  if (currentDay <= date) {
+    currentDay.setMonth(currentDay.getMonth() + 1);
+  }
+  console.log("INIT", currentDay);
 
-  const weeksDifference = Math.round((date - firstThursday) / (1000 * 60 * 60 * 24 * 7));
-  return Math.abs(weeksDifference) + 1;
+  const fridayIndex = 5;
+  while (currentDay.getDay() !== fridayIndex) {
+    currentDay.setMonth(currentDay.getMonth() + 1);
+    console.log("MONTH", currentDay, currentDay.getDay());
+  }
+
+  return currentDay;
 }
 
-console.log(getWeekNumberByDate(new Date(2024, 0, 3)));
-console.log(getWeekNumberByDate(new Date(2024, 0, 31)));
-console.log(getWeekNumberByDate(new Date(2024, 1, 23)));
+console.log(getNextFridayThe13th(new Date(2023, 1, 1)));

@@ -260,11 +260,23 @@ function getWeekNumberByDate(date) {
  * @return {Date} - The date of the next Friday the 13th.
  *
  * @example:
- * Date(2024, 0, 13) => Date(2024, 8, 13)
- * Date(2023, 1, 1) => Date(2023, 9, 13)
+ * Date(2024, 0, 13) => Date(2024, 8, 13) - ??? 2024-09-13
+ * Date(2023, 1, 1) => Date(2023, 9, 13) - ??? 2023-10-1
  */
-function getNextFridayThe13th(/* date */) {
-  throw new Error('Not implemented');
+function getNextFridayThe13th(date) {
+  const currentDay = new Date(date);
+  currentDay.setDate(13);
+
+  if (currentDay <= date) {
+    currentDay.setMonth(currentDay.getMonth() + 1);
+  }
+
+  const fridayIndex = 5;
+  while (currentDay.getDay() !== fridayIndex) {
+    currentDay.setMonth(currentDay.getMonth() + 1);
+  }
+
+  return currentDay;
 }
 
 /**
