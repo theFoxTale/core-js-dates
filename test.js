@@ -1,25 +1,18 @@
-function getWorkSchedule(period, countWorkDays, countOffDays) {
-  const [startDay, startMonth, startYear] = period.start.split('-').map(Number);
-  const [endDay, endMonth, endYear] = period.end.split('-').map(Number);
+function getWeekNumberByDate(date) {
+  const thursdayIndex = 4;
+  const firstJanuaryDay = new Date(date.getFullYear(), 0, 1);
+  const januaryDayIndex = firstJanuaryDay.getDay();
 
-  const currentDate = new Date(startYear, startMonth - 1, startDay);
-  const endDate = new Date(endYear, endMonth - 1, endDay);
+  const firstThursdayShift =
+    januaryDayIndex <= thursdayIndex
+      ? thursdayIndex - januaryDayIndex
+      : thursdayIndex - januaryDayIndex + 7;
+  const firstThursday = new Date(date.getFullYear(), 0, 1 + firstThursdayShift);
 
-  let counter = 0;
-  const workSchedule = [];
-  while (currentDate <= endDate) {
-    if (counter < countWorkDays) {
-      const day = String(currentDate.getDate()).padStart(2, '0');
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-      const year = currentDate.getFullYear();
-      workSchedule.push(`${day}-${month}-${year}`);
-    }
-    counter = (counter + 1) % (countWorkDays + countOffDays);
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-
-  return workSchedule;
+  const weeksDifference = Math.round((date - firstThursday) / (1000 * 60 * 60 * 24 * 7));
+  return Math.abs(weeksDifference) + 1;
 }
 
-console.log(getWorkSchedule({ start: '01-01-2024', end: '15-01-2024' }, 1, 3));
-// ['01-01-2024', '05-01-2024', '09-01-2024', '13-01-2024']
+console.log(getWeekNumberByDate(new Date(2024, 0, 3)));
+console.log(getWeekNumberByDate(new Date(2024, 0, 31)));
+console.log(getWeekNumberByDate(new Date(2024, 1, 23)));
